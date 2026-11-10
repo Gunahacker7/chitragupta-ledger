@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chitragupta Ledger — The Book of Deeds &amp; Debts</title>
+<meta name="description" content="A personal money + habit ledger kept the way Chitragupta keeps accounts in Yama's court. Built with Kiro for Kiroween 2026.">
+<!-- The single permitted external asset: Google Fonts stylesheet (design-system.md).
+     Full system-font fallback applies if it never loads. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="court-vignette" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- ══════════ COURT HEADER ══════════ -->
+  <header class="court-header">
+    <svg class="gopuram" viewBox="0 0 360 64" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <g fill="#0a0908">
+        <rect x="150" y="2"  width="60" height="10" rx="2"/>
+        <rect x="138" y="12" width="84" height="10" rx="2"/>
+        <rect x="124" y="22" width="112" height="11" rx="2"/>
+        <rect x="108" y="33" width="144" height="12" rx="2"/>
+        <rect x="90"  y="45" width="180" height="12" rx="2"/>
+        <rect x="70"  y="57" width="220" height="7"  rx="2"/>
+      </g>
+      <g fill="#c9a227" opacity="0.85">
+        <circle cx="180" cy="6" r="2.4"/>
+        <circle cx="158" cy="17" r="2"/><circle cx="202" cy="17" r="2"/>
+        <circle cx="146" cy="27" r="2"/><circle cx="214" cy="27" r="2"/>
+      </g>
+    </svg>
+
+    <div class="torches" aria-hidden="true">
+      <div class="torch torch-left"><span class="flame"></span><span class="bowl"></span></div>
+      <div class="torch torch-right"><span class="flame flame-b"></span><span class="bowl"></span></div>
+    </div>
+
+    <p class="court-label">Yama's Court · The Great Account</p>
+    <h1 class="tamil-title">சித்திரகுப்தர் கணக்கு</h1>
+    <p class="app-title">Chitragupta Ledger</p>
+    <p class="tagline">The Book of Deeds &amp; Debts — every rupee and every deed, recorded.</p>
+
+    <button id="ambienceToggle" class="ambience-toggle" type="button" aria-pressed="true">
+      🔥 Court torches: <span id="ambienceState">lit</span>
+    </button>
+  </header>
+
+  <!-- ══════════ KARMA SCALES ══════════ -->
+  <section class="card scales-card" aria-label="Karma balance">
+    <div class="scales-head">
+      <div class="side side-punya">
+        <span class="side-label">✦ Punya · Merit</span>
+        <span class="side-total" id="punyaTotal">₹0</span>
+      </div>
+      <div class="scales-icon" aria-hidden="true">⚖</div>
+      <div class="side side-papa">
+        <span class="side-label">Papa · Debt ✦</span>
+        <span class="side-total" id="papaTotal">₹0</span>
+      </div>
+    </div>
+
+    <div class="gauge" role="img" aria-label="Karma gauge">
+      <div class="gauge-punya" id="gaugePunya"></div>
+      <div class="gauge-papa" id="gaugePapa"></div>
+      <div class="gauge-notch" aria-hidden="true"></div>
+    </div>
+
+    <p class="scales-state" id="scalesState">The scales rest in balance</p>
+    <p class="net-line">Net karma <strong id="netKarma">₹0</strong>
+      <span class="dot-sep" aria-hidden="true">·</span>
+      <span id="streakLine">🔥 0-day recording streak</span>
+    </p>
+  </section>
+
+  <!-- ══════════ ADD ENTRY ══════════ -->
+  <section class="card form-card" aria-label="Add an entry">
+    <h2 class="card-title">✒ Write in the book</h2>
+
+    <form id="entryForm" novalidate>
+      <div class="type-chips" role="radiogroup" aria-label="Entry type">
+        <button type="button" class="chip chip-papa is-active" data-type="expense" role="radio" aria-checked="true">📜 Expense</button>
+        <button type="button" class="chip" data-type="income" role="radio" aria-checked="false">💰 Income</button>
+        <button type="button" class="chip" data-type="saving" role="radio" aria-checked="false">🏺 Saving</button>
+        <button type="button" class="chip" data-type="deed" role="radio" aria-checked="false">🙏 Good deed</button>
+      </div>
+
+      <div class="form-grid">
+        <label class="field">
+          <span>Amount <span class="req" aria-hidden="true">*</span></span>
+          <span class="amount-wrap"><span class="rupee">₹</span>
+            <input id="amountInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0">
+          </span>
+          <span class="field-hint" id="amountHint">Required. For a good deed, amount is optional.</span>
+        </label>
+
+        <label class="field">
+          <span>Category</span>
+          <select id="categorySelect"></select>
+        </label>
+
+        <label class="field">
+          <span>Date</span>
+          <input id="dateInput" type="date">
+        </label>
+
+        <label class="field">
+          <span>Note <span class="opt">(optional)</span></span>
+          <input id="noteInput" type="text" maxlength="80" placeholder="What was this for?">
+        </label>
+      </div>
+
+      <p class="form-error" id="formError" role="alert" hidden></p>
+      <p class="form-ok" id="formOk" hidden>✒ Recorded in the book.</p>
+
+      <button class="record-btn" type="submit">Record entry</button>
+    </form>
+  </section>
+
+  <!-- ══════════ LEDGER BOOK ══════════ -->
+  <section class="ledger-wrap" aria-label="The ledger book">
+    <div class="ledger-head">
+      <h2 class="card-title light">📖 The Ledger Book</h2>
+      <label class="filter-label">Show
+        <select id="filterSelect">
+          <option value="all">All entries</option>
+          <option value="papa">Papa · Expenses</option>
+          <option value="punya">Punya · Income, Saving, Deeds</option>
+        </select>
+      </label>
+    </div>
+    <div id="ledgerBook"></div>
+  </section>
+
+  <!-- ══════════ YAMA'S VERDICT ══════════ -->
+  <section class="verdict-card" aria-label="Yama's verdict">
+    <div class="seal" aria-hidden="true">⚖</div>
+    <p class="court-label">The Court Pronounces</p>
+    <h2 class="tamil-title small">யமனின் தீர்ப்பு</h2>
+    <p class="verdict-month" id="verdictMonth">This month</p>
+
+    <div class="verdict-figures">
+      <div class="figure"><span class="fig-label">Money in</span><span class="fig-value" id="vIn">₹0</span></div>
+      <div class="figure"><span class="fig-label">Money out</span><span class="fig-value" id="vOut">₹0</span></div>
+      <div class="figure"><span class="fig-label">Saved</span><span class="fig-value" id="vSaved">₹0</span></div>
+      <div class="figure"><span class="fig-label">Good deeds</span><span class="fig-value" id="vDeeds">0</span></div>
+      <div class="figure"><span class="fig-label">Savings rate</span><span class="fig-value" id="vRate">—</span></div>
+    </div>
+
+    <p class="verdict-leak" id="vLeak"></p>
+    <p class="verdict-line" id="vLine">The court awaits your first deed.</p>
+
+    <button id="downloadVerdict" class="record-btn ghost" type="button">⬇ Download verdict card (PNG)</button>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="court-footer">
+    <p>Chitragupta misses nothing. Neither should you.</p>
+    <p class="footer-line">Built with Kiro for Kiroween 2026</p>
+    <button id="clearBook" class="clear-btn" type="button">Clear the book</button>
+    <span id="clearConfirm" class="clear-confirm" hidden>
+      Strike out every page?
+      <button id="clearYes" type="button">Yes, clear all</button>
+      <button id="clearNo" type="button">Keep the book</button>
+    </span>
+  </footer>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
