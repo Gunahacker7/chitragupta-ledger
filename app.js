@@ -278,8 +278,8 @@ function downloadVerdictCard() {
     y += 66;
   }
   /* verdict line */
-  ctx.fillStyle = '#e8c85a'; ctx.font = '700 44px Catamaran, system-ui, sans-serif'; ctx.textAlign = 'center';
-  wrapText(ctx, v.line, 540, y + 30, 860, 58);
+  ctx.fillStyle = '#e8c85a'; ctx.font = '700 40px Catamaran, system-ui, sans-serif'; ctx.textAlign = 'center';
+  wrapText(ctx, v.line, 540, y + 8, 780, 50);
   /* footer */
   ctx.fillStyle = '#a89f8d'; ctx.font = '600 32px system-ui, sans-serif';
   ctx.fillText('Chitragupta Ledger · Built with Kiro · Kiroween 2026', 540, 1252);
