@@ -307,8 +307,17 @@ body.no-ambience *{animation:none !important; transition:none !important}
   .torch{top:96px}
   .torch-left{left:10px}
   .torch-right{right:10px}
-  .page{padding-left:50px}
-  .page::before{left:38px}
+  .page{padding-left:42px; padding-right:10px}
+  .page::before{left:30px}
   .verdict-card{padding:22px 14px}
   .figure{min-width:70px}
+  /* Ledger rows on phones: reclaim width for the category/note column so
+     notes stop truncating mid-word and category names stop wrapping. */
+  .entry-row{gap:7px}
+  .entry-glyph{width:20px; font-size:1rem}
+  .entry-cat{white-space:nowrap; font-size:.9rem}
+  .entry-note{white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+  .entry-side{font-size:.6rem; letter-spacing:.06em}
+  .entry-amount{font-size:.92rem}
+  .entry-del{padding:6px 9px}
 }
