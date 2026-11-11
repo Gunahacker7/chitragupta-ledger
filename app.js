@@ -20,13 +20,40 @@ var DEED_WEIGHT = 1; /* ₹1 of Punya weight per good deed (requirements §3.1) 
 
 function emptyState() { return { version: 1, seeded: false, entries: [] }; }
 
+function isValidISODate(s) {
+  if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  var d = new Date(s + 'T00:00:00');
+  return !isNaN(d.getTime()) && toISODate(d) === s; /* round-trip rejects Feb 31 etc. */
+}
+
+/* A stored entry is only trusted if every field matches the data model
+   (design.md §2). Anything else — hand-edited, corrupt, or written by a
+   foreign tool — is dropped, so malformed storage can never crash the
+   renderers or poison the totals (requirements §8.4). */
+function sanitizeEntry(e) {
+  if (!e || typeof e !== 'object') return null;
+  if (!CATEGORIES[e.type]) return null;
+  if (typeof e.amount !== 'number' || !isFinite(e.amount) || e.amount < 0) return null;
+  if (!isValidISODate(e.date)) return null;
+  return {
+    id: typeof e.id === 'string' && e.id ? e.id : makeId(),
+    type: e.type,
+    amount: Math.round(e.amount * 100) / 100,
+    category: typeof e.category === 'string' && e.category ? e.category : 'Other',
+    note: typeof e.note === 'string' ? e.note : '',
+    date: e.date
+  };
+}
+
 function loadState() {
   try {
     var raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return emptyState();
     var parsed = JSON.parse(raw);
     if (!parsed || !Array.isArray(parsed.entries)) return emptyState();
-    return parsed;
+    var clean = [];
+    parsed.entries.forEach(function (e) { var s = sanitizeEntry(e); if (s) clean.push(s); });
+    return { version: 1, seeded: !!parsed.seeded, entries: clean };
   } catch (e) { return emptyState(); } /* corrupt data → empty state, never throw */
 }
 
@@ -152,8 +179,8 @@ function renderLedger() {
     byDate[date].forEach(function (e) { dayNet += entryPunya(e) - entryPava(e); });
     var rows = byDate[date].map(function (e) {
       var side = SIDE[e.type];
-      var amt = side === 'pava' ? '− ' + fmtINR(e.amount) : '+ ' + fmtINR(e.type === 'deed' && !e.amount ? DEED_WEIGHT : e.amount);
-      return '<div class="entry-row' + (e.id === freshEntryId ? ' fresh' : '') + '" data-id="' + e.id + '">' +
+      var amt = side === 'pava' ? '− ' + fmtINR(e.amount) : '+ ' + fmtINR(e.type === 'deed' ? DEED_WEIGHT : e.amount);
+      return '<div class="entry-row' + (e.id === freshEntryId ? ' fresh' : '') + '" data-id="' + esc(e.id) + '">' +
         '<span class="entry-glyph" aria-hidden="true">' + GLYPHS[e.type] + '</span>' +
         '<span class="entry-main"><span class="entry-cat">' + esc(e.category) + '</span>' +
         (e.note ? '<span class="entry-note">' + esc(e.note) + '</span>' : '') + '</span>' +
@@ -180,7 +207,7 @@ function monthEntries() {
 
 function computeVerdict() {
   var list = monthEntries();
-  var v = { count: list.length, inAmt: 0, outAmt: 0, saved: 0, deeds: 0, punya: 0, pava: 0, byCat: {} };
+  var v = { count: list.length, inAmt: 0, outAmt: 0, saved: 0, deeds: 0, punya: 0, pava: 0, byCat: Object.create(null) };
   list.forEach(function (e) {
     v.punya += entryPunya(e); v.pava += entryPava(e);
     if (e.type === 'income') v.inAmt += e.amount || 0;
@@ -188,6 +215,7 @@ function computeVerdict() {
     if (e.type === 'saving') v.saved += e.amount || 0;
     if (e.type === 'deed') v.deeds += 1;
   });
+  v.net = v.punya - v.pava; /* month's net karma (requirements §5.2) */
   v.rate = v.inAmt > 0 ? ((v.inAmt - v.outAmt) / v.inAmt) * 100 : null;
   v.topCat = null; v.topAmt = 0;
   Object.keys(v.byCat).forEach(function (c) { if (v.byCat[c] > v.topAmt) { v.topAmt = v.byCat[c]; v.topCat = c; } });
@@ -210,6 +238,7 @@ function renderVerdict() {
   $('vOut').textContent = fmtINR(v.outAmt);
   $('vSaved').textContent = fmtINR(v.saved);
   $('vDeeds').textContent = String(v.deeds);
+  $('vNet').textContent = v.net < 0 ? '−' + fmtINR(Math.abs(v.net)) : fmtINR(v.net);
   $('vRate').textContent = v.rate === null ? '—' : (Math.round(v.rate * 10) / 10) + '%';
   $('vLeak').textContent = v.topCat ? 'Greatest leak: ' + v.topCat + ' · ' + fmtINR(v.topAmt) : '';
   $('vLine').textContent = v.line;
@@ -261,16 +290,17 @@ function downloadVerdictCard() {
     ['Money out', fmtINR(v.outAmt)],
     ['Saved', fmtINR(v.saved)],
     ['Good deeds', String(v.deeds)],
+    ['Net karma', v.net < 0 ? '−' + fmtINR(Math.abs(v.net)) : fmtINR(v.net)],
     ['Savings rate', v.rate === null ? '—' : (Math.round(v.rate * 10) / 10) + '%']
   ];
   ctx.textAlign = 'left';
-  var y = 700;
+  var y = 684;
   rows.forEach(function (r) {
     ctx.fillStyle = '#a89f8d'; ctx.font = '600 36px system-ui, sans-serif';
     ctx.fillText(r[0].toUpperCase(), 170, y);
     ctx.fillStyle = '#f2ead8'; ctx.font = '800 44px system-ui, sans-serif';
     ctx.textAlign = 'right'; ctx.fillText(r[1], 910, y); ctx.textAlign = 'left';
-    y += 74;
+    y += 64;
   });
   if (v.topCat) {
     ctx.fillStyle = '#f0936b'; ctx.font = '600 36px system-ui, sans-serif'; ctx.textAlign = 'center';
@@ -330,11 +360,15 @@ function handleSubmit(ev) {
   var amount = amountRaw === '' ? NaN : parseFloat(amountRaw);
   var isDeed = selectedType === 'deed';
   if (isDeed && amountRaw === '') amount = 0;
-  if (isNaN(amount) || amount < 0 || (!isDeed && amount <= 0)) {
+  if (isNaN(amount) || !isFinite(amount) || amount < 0 || (!isDeed && amount <= 0)) {
     showFormError(isDeed ? 'Enter an amount of ₹0 or more for the deed.' : 'The court needs an amount greater than ₹0.');
     return;
   }
   amount = Math.round(amount * 100) / 100;
+  if (!isDeed && amount <= 0) { /* e.g. 0.001 rounds to ₹0.00 — still not an amount */
+    showFormError('The court needs an amount greater than ₹0.');
+    return;
+  }
   var date = $('dateInput').value || todayISO();
   if (date > todayISO()) { showFormError('Chitragupta records what has happened — future dates are refused.'); return; }
   var entry = {
