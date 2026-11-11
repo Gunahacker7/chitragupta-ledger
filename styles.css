@@ -124,10 +124,10 @@ body.no-ambience *{animation:none !important; transition:none !important}
 /* ─────────────── Karma scales ─────────────── */
 .scales-head{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
 .side{display:flex; flex-direction:column; gap:2px; min-width:0}
-.side-papa{text-align:right; align-items:flex-end}
+.side-pava{text-align:right; align-items:flex-end}
 .side-label{font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ash); font-weight:700}
 .side-punya .side-total{color:var(--gold-bright)}
-.side-papa .side-total{color:var(--ember)}
+.side-pava .side-total{color:var(--ember)}
 .side-total{font-size:clamp(1.3rem,5vw,1.8rem); font-weight:800; font-variant-numeric:tabular-nums; line-height:1.1}
 .scales-icon{font-size:1.7rem; color:var(--gold); padding-top:6px}
 
@@ -136,7 +136,7 @@ body.no-ambience *{animation:none !important; transition:none !important}
   background:#0d0b09; border:1px solid var(--gold-line); border-radius:999px; overflow:hidden;
 }
 .gauge-punya{background:linear-gradient(90deg,#8a6d1f,var(--gold) 60%,var(--gold-bright)); width:50%; transition:width .6s ease}
-.gauge-papa{background:linear-gradient(90deg,var(--ember),var(--ember-deep)); flex:1; transition:width .6s ease}
+.gauge-pava{background:linear-gradient(90deg,var(--ember),var(--ember-deep)); flex:1; transition:width .6s ease}
 .gauge-notch{position:absolute; left:50%; top:-2px; bottom:-2px; width:2px; background:rgba(242,234,216,.55); transform:translateX(-50%)}
 
 .scales-state{text-align:center; margin:8px 0 0; font-size:1.02rem; font-weight:700; color:var(--bone)}
@@ -153,7 +153,7 @@ body.no-ambience *{animation:none !important; transition:none !important}
 }
 .chip:hover{border-color:var(--gold)}
 .chip.is-active{border-color:var(--gold); background:rgba(201,162,39,.14); color:var(--gold-bright); font-weight:700}
-.chip.is-active.chip-papa{border-color:var(--ember); background:rgba(224,93,42,.13); color:#f0936b}
+.chip.is-active.chip-pava{border-color:var(--ember); background:rgba(224,93,42,.13); color:#f0936b}
 
 .form-grid{display:grid; grid-template-columns:1fr; gap:14px}
 @media (min-width:640px){.form-grid{grid-template-columns:1fr 1fr}}
@@ -238,10 +238,10 @@ body.no-ambience *{animation:none !important; transition:none !important}
 .entry-note{display:block; color:#6b5836; font-size:.83rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .entry-side{font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; font-weight:800}
 .entry-side.punya{color:#7a5c00}
-.entry-side.papa{color:var(--ember-deep)}
+.entry-side.pava{color:var(--ember-deep)}
 .entry-amount{font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap}
 .entry-amount.punya{color:#7a5c00}
-.entry-amount.papa{color:var(--ember-deep)}
+.entry-amount.pava{color:var(--ember-deep)}
 
 .entry-del{
   flex:none; cursor:pointer; background:none; border:1px solid rgba(46,36,23,.3);

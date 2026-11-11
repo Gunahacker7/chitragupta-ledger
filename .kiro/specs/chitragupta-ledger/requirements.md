@@ -9,7 +9,7 @@
 In Hindu mythology, Chitragupta is the divine accountant of Yama's court who
 records every deed of every soul in his great book. Chitragupta Ledger re-skins
 a personal money + habit tracker as that book: expenses are recorded as
-**Papa** (debt/sin) entries and savings, income and good deeds as **Punya**
+**Pava** (debt/sin) entries and savings, income and good deeds as **Punya**
 (merit) entries. The app keeps a running karma balance, presents the entries
 as pages of Chitragupta's book, and at any time can pronounce **Yama's
 Verdict** — a court-style judgement of the current month, exportable as a
@@ -23,10 +23,10 @@ Fonts stylesheet (with full system-font fallback).
 ## Glossary
 
 - **Entry** — one recorded transaction or deed.
-- **Papa** — the "debt" side of the ledger. Expense entries count as Papa.
+- **Pava** — the "debt" side of the ledger. Expense entries count as Pava.
 - **Punya** — the "merit" side of the ledger. Income, saving and good-deed
   entries count as Punya.
-- **Karma balance** — Punya total minus Papa total, plus a visual gauge.
+- **Karma balance** — Punya total minus Pava total, plus a visual gauge.
 - **Ledger book** — the date-grouped, page-styled list of entries.
 - **Verdict** — the monthly summary judgement card.
 - **Ambience** — the optional torch-glow visual atmosphere mode.
@@ -42,7 +42,7 @@ deed goes unrecorded in the book.
 ### Acceptance criteria
 
 1. WHEN the user opens the add-entry form, THE SYSTEM SHALL offer four entry
-   types: Expense (Papa), Income (Punya), Saving (Punya), Good deed (Punya),
+   types: Expense (Pava), Income (Punya), Saving (Punya), Good deed (Punya),
    with Expense selected by default.
 2. THE SYSTEM SHALL require an amount greater than ₹0 for Expense, Income and
    Saving entries; IF the amount is empty, zero, negative or non-numeric,
@@ -80,7 +80,7 @@ the book stays truthful.
    after an inline two-step confirmation, removes ALL entries and the seeded
    flag, returning the app to an empty-ledger state.
 
-## Requirement 3 — Karma (Punya–Papa) balance
+## Requirement 3 — Karma (Punya–Pava) balance
 
 **User story:** As a user, I want to see at a glance whether my month is
 tilting toward merit or debt, so that the balance itself motivates better
@@ -88,16 +88,16 @@ choices.
 
 ### Acceptance criteria
 
-1. THE SYSTEM SHALL compute Papa total as the sum of all Expense amounts and
+1. THE SYSTEM SHALL compute Pava total as the sum of all Expense amounts and
    Punya total as the sum of all Income + Saving amounts plus ₹1 per Good
    deed entry.
 2. THE SYSTEM SHALL display both totals and the net karma score
-   (Punya − Papa) in the court header, formatted in ₹.
+   (Punya − Pava) in the court header, formatted in ₹.
 3. THE SYSTEM SHALL render an animated horizontal gauge whose gold (Punya)
-   and ember (Papa) proportions animate to their new values within 600 ms of
+   and ember (Pava) proportions animate to their new values within 600 ms of
    any change.
-4. WHEN Punya exceeds Papa, THE SYSTEM SHALL label the state "The scales tip
-   toward Punya"; WHEN Papa exceeds Punya, "The scales tip toward Papa";
+4. WHEN Punya exceeds Pava, THE SYSTEM SHALL label the state "The scales tip
+   toward Punya"; WHEN Pava exceeds Punya, "The scales tip toward Pava";
    WHEN equal or both zero, "The scales rest in balance".
 5. THE SYSTEM SHALL compute a daily streak: the count of consecutive days
    ending today (or yesterday, if today has no entry yet) that contain at
@@ -115,13 +115,13 @@ turning the pages of my own account.
    group headed by a page-style date banner (e.g. "Tuesday, 10 November
    2026").
 2. EACH entry row SHALL show: a type glyph, category, note (if any), signed
-   amount (+ ₹ for Punya, − ₹ for Papa), and whether it weighs on the Punya
-   or Papa side.
-3. THE SYSTEM SHALL provide a filter control with options All / Papa
+   amount (+ ₹ for Punya, − ₹ for Pava), and whether it weighs on the Punya
+   or Pava side.
+3. THE SYSTEM SHALL provide a filter control with options All / Pava
    (Expenses) / Punya (Income, Saving, Deeds); WHEN a filter is active, only
    matching entries SHALL be shown and the group day-totals SHALL reflect the
    filter.
-4. EACH date group SHALL show the day's net (Punya − Papa for that day).
+4. EACH date group SHALL show the day's net (Punya − Pava for that day).
 5. IF there are no entries (or none match the filter), THE SYSTEM SHALL show
    an empty-state page reading "The page is blank. Write your first deed."
 6. THE ledger SHALL be styled as parchment pages with a ruled margin line,
@@ -154,7 +154,7 @@ single dramatic summary tells me how I did and what to fix.
         to seize."
    - e. ELSE IF savings rate ≥ 0% → "The court watches. Spend with a steadier
         hand."
-   - f. ELSE IF Papa total > Punya total AND savings rate < 0% → "Naraka's
+   - f. ELSE IF Pava total > Punya total AND savings rate < 0% → "Naraka's
         clerks are sharpening their quills — debts outweigh deeds."
    - g. ELSE → "Yama drums his fingers. Turn the page and do better."
 6. THE verdict SHALL be rendered as a court judgement card: dark seal header

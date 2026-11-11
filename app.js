@@ -15,7 +15,7 @@ var CATEGORIES = {
   deed:    ['Helped someone', 'Donation', 'Taught/shared', 'Kindness', 'Other']
 };
 var GLYPHS = { expense: '📜', income: '💰', saving: '🏺', deed: '🙏' };
-var SIDE   = { expense: 'papa', income: 'punya', saving: 'punya', deed: 'punya' };
+var SIDE   = { expense: 'pava', income: 'punya', saving: 'punya', deed: 'punya' };
 var DEED_WEIGHT = 1; /* ₹1 of Punya weight per good deed (requirements §3.1) */
 
 function emptyState() { return { version: 1, seeded: false, entries: [] }; }
@@ -81,12 +81,12 @@ function entryPunya(e) {
   if (e.type === 'deed') return DEED_WEIGHT;
   return 0;
 }
-function entryPapa(e) { return e.type === 'expense' ? (e.amount || 0) : 0; }
+function entryPava(e) { return e.type === 'expense' ? (e.amount || 0) : 0; }
 
 function totals() {
-  var punya = 0, papa = 0;
-  state.entries.forEach(function (e) { punya += entryPunya(e); papa += entryPapa(e); });
-  return { punya: punya, papa: papa, net: punya - papa };
+  var punya = 0, pava = 0;
+  state.entries.forEach(function (e) { punya += entryPunya(e); pava += entryPava(e); });
+  return { punya: punya, pava: pava, net: punya - pava };
 }
 
 function computeStreak() {
@@ -112,14 +112,14 @@ var freshEntryId = null; /* entry to animate with the quill write-in */
 function renderScales() {
   var t = totals();
   $('punyaTotal').textContent = fmtINR(t.punya);
-  $('papaTotal').textContent = fmtINR(t.papa);
+  $('pavaTotal').textContent = fmtINR(t.pava);
   $('netKarma').textContent = t.net < 0 ? '−' + fmtINR(Math.abs(t.net)) : fmtINR(t.net);
-  var sum = t.punya + t.papa;
+  var sum = t.punya + t.pava;
   var punyaPct = sum === 0 ? 50 : (t.punya / sum) * 100;
   $('gaugePunya').style.width = punyaPct + '%';
   $('scalesState').textContent =
-    sum === 0 || t.punya === t.papa ? 'The scales rest in balance' :
-    t.punya > t.papa ? 'The scales tip toward Punya ✦' : '✦ The scales tip toward Papa';
+    sum === 0 || t.punya === t.pava ? 'The scales rest in balance' :
+    t.punya > t.pava ? 'The scales tip toward Punya ✦' : '✦ The scales tip toward Pava';
   var streak = computeStreak();
   $('streakLine').textContent = '🔥 ' + streak + '-day recording streak';
 }
@@ -149,10 +149,10 @@ function renderLedger() {
   });
   var html = groups.map(function (date) {
     var dayNet = 0;
-    byDate[date].forEach(function (e) { dayNet += entryPunya(e) - entryPapa(e); });
+    byDate[date].forEach(function (e) { dayNet += entryPunya(e) - entryPava(e); });
     var rows = byDate[date].map(function (e) {
       var side = SIDE[e.type];
-      var amt = side === 'papa' ? '− ' + fmtINR(e.amount) : '+ ' + fmtINR(e.type === 'deed' && !e.amount ? DEED_WEIGHT : e.amount);
+      var amt = side === 'pava' ? '− ' + fmtINR(e.amount) : '+ ' + fmtINR(e.type === 'deed' && !e.amount ? DEED_WEIGHT : e.amount);
       return '<div class="entry-row' + (e.id === freshEntryId ? ' fresh' : '') + '" data-id="' + e.id + '">' +
         '<span class="entry-glyph" aria-hidden="true">' + GLYPHS[e.type] + '</span>' +
         '<span class="entry-main"><span class="entry-cat">' + esc(e.category) + '</span>' +
@@ -180,9 +180,9 @@ function monthEntries() {
 
 function computeVerdict() {
   var list = monthEntries();
-  var v = { count: list.length, inAmt: 0, outAmt: 0, saved: 0, deeds: 0, punya: 0, papa: 0, byCat: {} };
+  var v = { count: list.length, inAmt: 0, outAmt: 0, saved: 0, deeds: 0, punya: 0, pava: 0, byCat: {} };
   list.forEach(function (e) {
-    v.punya += entryPunya(e); v.papa += entryPapa(e);
+    v.punya += entryPunya(e); v.pava += entryPava(e);
     if (e.type === 'income') v.inAmt += e.amount || 0;
     if (e.type === 'expense') { v.outAmt += e.amount || 0; v.byCat[e.category] = (v.byCat[e.category] || 0) + (e.amount || 0); }
     if (e.type === 'saving') v.saved += e.amount || 0;
@@ -197,7 +197,7 @@ function computeVerdict() {
   else if (v.rate !== null && v.rate >= 30) v.line = 'The scales smile upon you. Swarga path is clear.';
   else if (v.rate !== null && v.rate >= 10) v.line = 'A guarded month. Yamadutas find little to seize.';
   else if (v.rate !== null && v.rate >= 0) v.line = 'The court watches. Spend with a steadier hand.';
-  else if (v.rate !== null && v.rate < 0 && v.papa > v.punya) v.line = 'Naraka\u2019s clerks are sharpening their quills \u2014 debts outweigh deeds.';
+  else if (v.rate !== null && v.rate < 0 && v.pava > v.punya) v.line = 'Naraka\u2019s clerks are sharpening their quills \u2014 debts outweigh deeds.';
   else v.line = 'Yama drums his fingers. Turn the page and do better.';
   return v;
 }

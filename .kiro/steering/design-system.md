@@ -20,13 +20,13 @@ usable. Costume serves function, never hides it.
 - `--gold-bright: #e8c85a` — hover/highlight only.
 - `--parchment: #efe3c2` — ledger page surfaces.
 - `--parchment-ink: #2e2417` — text on parchment.
-- `--ember: #e05d2a` — flame orange: the Papa side, warnings, torch fire.
+- `--ember: #e05d2a` — flame orange: the Pava side, warnings, torch fire.
 - `--ash: #a89f8d` — muted text on dark.
 - `--bone: #f2ead8` — primary text on dark.
 
 Rules:
 - Gold is an accent, never a background for body text areas.
-- Papa is always ember; Punya is always gold. Never swap them.
+- Pava is always ember; Punya is always gold. Never swap them.
 - No gradients that introduce new hues; warm black→coal and gold fades only.
 
 ## Typography
@@ -87,7 +87,7 @@ Rules:
 
 - Courtly but plain English; short sentences.
 - Amounts always `₹` with en-IN grouping.
-- Punya/Papa terminology used consistently; never use "good/bad karma"
+- Punya/Pava terminology used consistently; never use "good/bad karma"
   wording — the scales imagery carries the judgement.
 - Tamil appears in display headings only (title, verdict heading), always
   paired with an English equivalent nearby.

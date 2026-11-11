@@ -3,7 +3,7 @@
 A personal money + habit ledger kept the way **Chitragupta**, the divine
 accountant of Yama's court, keeps accounts in his great book.
 
-Every expense is written as a **Papa** (debt) entry. Every income, saving and
+Every expense is written as a **Pava** (debt) entry. Every income, saving and
 good deed is written as **Punya** (merit). The app keeps the karma scales
 balanced in public view, stores your entries as parchment pages of the great
 book, and whenever you ask, the court pronounces **Yama's Verdict** — a
@@ -33,10 +33,10 @@ delete them or use **Clear the book** in the footer.
   with amount (₹), per-type categories, note and date, with validation
   (no ₹0 expenses, no future dates). New entries appear with a quill
   write-in animation.
-- **Karma scales** — live Punya vs Papa totals, an animated gold/ember
+- **Karma scales** — live Punya vs Pava totals, an animated gold/ember
   gauge, net karma, and a recording streak (consecutive days written).
 - **The Ledger Book** — entries grouped by date on parchment pages with day
-  nets, filterable to Papa or Punya, with inline two-step "strike out"
+  nets, filterable to Pava or Punya, with inline two-step "strike out"
   deletion and a clear-the-book reset.
 - **Yama's Verdict** — current-month judgement: money in/out, saved, deeds,
   savings rate, the "greatest leak" category, and one verdict line chosen
@@ -84,13 +84,13 @@ committed at the repo root, as the hackathon requires:
 1. **(0:00) The court opens** — dark hall, torches flickering, gopuram
    silhouette, Tamil title "சித்திரகுப்தர் கணக்கு". The book is already
    alive: seeded salary, bills, groceries, a SIP and a good deed.
-2. **(0:25) The scales** — point at the karma gauge: Punya gold vs Papa
+2. **(0:25) The scales** — point at the karma gauge: Punya gold vs Pava
    ember, net karma, and the recording streak.
 3. **(0:45) Write a deed of debt** — add today's lunch as an Expense. Watch
-   the quill write-in animation and the gauge tip toward Papa in real time.
+   the quill write-in animation and the gauge tip toward Pava in real time.
 4. **(1:15) Tip it back** — add a Saving (SIP) and a Good deed. The scales
    swing to Punya; the streak holds.
-5. **(1:40) Turn the pages** — scroll the parchment ledger, filter to Papa
+5. **(1:40) Turn the pages** — scroll the parchment ledger, filter to Pava
    only, strike out one entry with the two-step delete.
 6. **(2:05) Yama's Verdict** — the judgement card: totals, savings rate,
    greatest leak, and the verdict line. Click **Download verdict card** and

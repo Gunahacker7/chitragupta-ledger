@@ -20,7 +20,7 @@ app.js       — state, persistence, rendering, verdict rules, canvas export
 |---|---|
 | `Store` | Load/save state from `localStorage`; seed demo data on first run |
 | `Money` | ₹ formatting (`Intl.NumberFormat('en-IN')`), parsing/validation |
-| `Karma` | Papa/Punya totals, net score, gauge proportions, streak |
+| `Karma` | Pava/Punya totals, net score, gauge proportions, streak |
 | `Render` | Header totals, gauge, ledger book (grouped + filtered), verdict |
 | `Form` | Type→category mapping, validation, submit, quill animation |
 | `Verdict` | Monthly aggregation, verdict-line rule table, PNG canvas export |
@@ -60,9 +60,9 @@ Key: **`chitragupta-ledger-v1`** — a single JSON object:
 
 ### Derived values (never stored)
 
-- **Papa total** = Σ expense amounts.
+- **Pava total** = Σ expense amounts.
 - **Punya total** = Σ income + Σ saving + (₹1 × deed count).
-- **Net karma** = Punya − Papa.
+- **Net karma** = Punya − Pava.
 - **Streak** = consecutive days with ≥1 entry ending today (or yesterday if
   today is still unwritten).
 - **Monthly aggregates** for the Verdict are computed by filtering entries
@@ -72,7 +72,7 @@ Key: **`chitragupta-ledger-v1`** — a single JSON object:
 
 | Type | Side | Categories |
 |---|---|---|
-| expense | Papa | Food, Travel, Bills, Shopping, Health, Entertainment, Other |
+| expense | Pava | Food, Travel, Bills, Shopping, Health, Entertainment, Other |
 | income | Punya | Salary, Business, Gift, Interest, Other |
 | saving | Punya | Bank deposit, Mutual fund, Gold, Cash reserve, Other |
 | deed | Punya | Helped someone, Donation, Taught/shared, Kindness, Other |
@@ -92,7 +92,7 @@ Full rules live in `.kiro/steering/design-system.md`. Summary:
 | `--gold-bright` | `#e8c85a` | highlights, hover |
 | `--parchment` | `#efe3c2` | ledger page background |
 | `--parchment-ink` | `#2e2417` | text on parchment |
-| `--ember` | `#e05d2a` | Papa / torch flame |
+| `--ember` | `#e05d2a` | Pava / torch flame |
 | `--ash` | `#a89f8d` | muted text on dark |
 | `--bone` | `#f2ead8` | primary text on dark |
 
@@ -156,7 +156,7 @@ Evaluated in order against current-month data; `sr` = savings rate %.
 | c | sr ≥ 30 | "The scales smile upon you. Swarga path is clear." |
 | d | sr ≥ 10 | "A guarded month. Yamadutas find little to seize." |
 | e | sr ≥ 0 | "The court watches. Spend with a steadier hand." |
-| f | sr < 0 and Papa > Punya | "Naraka's clerks are sharpening their quills — debts outweigh deeds." |
+| f | sr < 0 and Pava > Punya | "Naraka's clerks are sharpening their quills — debts outweigh deeds." |
 | g | otherwise | "Yama drums his fingers. Turn the page and do better." |
 
 ## 5. Canvas verdict card
